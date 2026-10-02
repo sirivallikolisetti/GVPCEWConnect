@@ -68,7 +68,7 @@ function LoginPage() {
 
   async function forgot() {
     const parsed = z.string().email().safeParse(email.trim());
-    if (!parsed.success) return toast.error("Enter your email above first.");
+    if (!parsed.success) { toast.error("Enter your email above first."); return; }
     const { error } = await supabase.auth.resetPasswordForEmail(parsed.data, {
       redirectTo: `${window.location.origin}/reset-password`,
     });
@@ -85,7 +85,7 @@ function LoginPage() {
             <Mail className="absolute left-3 top-2.5 size-4 text-muted-foreground" />
             <Input id="email" type="email" className="pl-9" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@gvpcew.ac.in" />
           </div>
-          {errors.email && <p className="mt-1 text-xs text-destructive">{errors.email}</p>}
+          {errors["email"] && <p className="mt-1 text-xs text-destructive">{errors["email"]}</p>}
         </div>
         <div>
           <Label htmlFor="password">Password</Label>
@@ -93,7 +93,7 @@ function LoginPage() {
             <Lock className="absolute left-3 top-2.5 size-4 text-muted-foreground" />
             <Input id="password" type="password" className="pl-9" value={password} onChange={(e) => setPassword(e.target.value)} />
           </div>
-          {errors.password && <p className="mt-1 text-xs text-destructive">{errors.password}</p>}
+          {errors["password"] && <p className="mt-1 text-xs text-destructive">{errors["password"]}</p>}
           <button type="button" onClick={forgot} className="mt-1 block w-full text-right text-xs font-medium text-primary">Forgot password?</button>
         </div>
         <Button type="submit" className="w-full" size="lg" disabled={loading}>

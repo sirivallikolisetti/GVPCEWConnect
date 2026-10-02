@@ -137,11 +137,11 @@ function CompleteRegistration() {
     setErr(null);
     const { error } = await supabase.rpc("complete_registration", {
       p_role: role,
-      p_full_name: meta.full_name || me?.user.email?.split("@")[0] || "User",
-      p_department_id: meta.department_id || undefined,
-      p_roll_no: meta.roll_no || undefined,
-      p_claim_faculty_id: meta.claim_faculty_id || undefined,
-      p_designation: meta.designation || undefined,
+      p_full_name: meta["full_name"] || me?.user.email?.split("@")[0] || "User",
+      p_department_id: (meta["department_id"] || null) as unknown as string,
+      p_roll_no: meta["roll_no"] || undefined,
+      p_claim_faculty_id: meta["claim_faculty_id"] || undefined,
+      p_designation: meta["designation"] || undefined,
     });
     if (error) return setErr(error.message);
     qc.invalidateQueries();
@@ -150,11 +150,11 @@ function CompleteRegistration() {
   useEffect(() => {
     if (tried.current) return;
     tried.current = true;
-    if (meta.role === "student" || meta.role === "faculty") run(meta.role);
+    if (meta["role"] === "student" || meta["role"] === "faculty") run(meta["role"]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  if (!err && (meta.role === "student" || meta.role === "faculty")) return <Loading label="Setting up your account…" />;
+  if (!err && (meta["role"] === "student" || meta["role"] === "faculty")) return <Loading label="Setting up your account…" />;
   return (
     <div className="mx-auto max-w-sm p-8 text-center">
       <h1 className="text-xl font-bold">Finish setting up</h1>
