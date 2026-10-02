@@ -14,7 +14,11 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as RegisterRouteImport } from './routes/register'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedSearchRouteImport } from './routes/_authenticated/search'
+import { Route as AuthenticatedFacultyIdIndexRouteImport } from './routes/_authenticated/faculty.$id.index'
+import { Route as AuthenticatedFacultyIdRequestRouteImport } from './routes/_authenticated/faculty.$id.request'
+import { Route as AuthenticatedFacultyIdTimetableRouteImport } from './routes/_authenticated/faculty.$id.timetable'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -40,25 +44,56 @@ const ResetPasswordRoute = ResetPasswordRouteImport.update({
   path: '/reset-password',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedSearchRoute = AuthenticatedSearchRouteImport.update({
   id: '/search',
   path: '/search',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedFacultyIdIndexRoute =
+  AuthenticatedFacultyIdIndexRouteImport.update({
+    id: '/faculty/$id/',
+    path: '/faculty/$id/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedFacultyIdRequestRoute =
+  AuthenticatedFacultyIdRequestRouteImport.update({
+    id: '/faculty/$id/request',
+    path: '/faculty/$id/request',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedFacultyIdTimetableRoute =
+  AuthenticatedFacultyIdTimetableRouteImport.update({
+    id: '/faculty/$id/timetable',
+    path: '/faculty/$id/timetable',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
   '/search': typeof AuthenticatedSearchRoute
+  '/faculty/$id/request': typeof AuthenticatedFacultyIdRequestRoute
+  '/faculty/$id/timetable': typeof AuthenticatedFacultyIdTimetableRoute
+  '/faculty/$id/': typeof AuthenticatedFacultyIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
   '/search': typeof AuthenticatedSearchRoute
+  '/faculty/$id/request': typeof AuthenticatedFacultyIdRequestRoute
+  '/faculty/$id/timetable': typeof AuthenticatedFacultyIdTimetableRoute
+  '/faculty/$id': typeof AuthenticatedFacultyIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -67,13 +102,35 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/search': typeof AuthenticatedSearchRoute
+  '/_authenticated/faculty/$id/request': typeof AuthenticatedFacultyIdRequestRoute
+  '/_authenticated/faculty/$id/timetable': typeof AuthenticatedFacultyIdTimetableRoute
+  '/_authenticated/faculty/$id/': typeof AuthenticatedFacultyIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login' | '/register' | '/reset-password' | '/search'
+  fullPaths:
+    | '/'
+    | '/login'
+    | '/register'
+    | '/reset-password'
+    | '/dashboard'
+    | '/search'
+    | '/faculty/$id/request'
+    | '/faculty/$id/timetable'
+    | '/faculty/$id/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/register' | '/reset-password' | '/search'
+  to:
+    | '/'
+    | '/login'
+    | '/register'
+    | '/reset-password'
+    | '/dashboard'
+    | '/search'
+    | '/faculty/$id/request'
+    | '/faculty/$id/timetable'
+    | '/faculty/$id'
   id:
     | '__root__'
     | '/'
@@ -81,7 +138,11 @@ export interface FileRouteTypes {
     | '/login'
     | '/register'
     | '/reset-password'
+    | '/_authenticated/dashboard'
     | '/_authenticated/search'
+    | '/_authenticated/faculty/$id/request'
+    | '/_authenticated/faculty/$id/timetable'
+    | '/_authenticated/faculty/$id/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -129,6 +190,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ResetPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/dashboard': {
+      id: '/_authenticated/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AuthenticatedDashboardRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/search': {
       id: '/_authenticated/search'
       path: '/search'
@@ -136,15 +204,44 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedSearchRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/faculty/$id/': {
+      id: '/_authenticated/faculty/$id/'
+      path: '/faculty/$id'
+      fullPath: '/faculty/$id/'
+      preLoaderRoute: typeof AuthenticatedFacultyIdIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/faculty/$id/request': {
+      id: '/_authenticated/faculty/$id/request'
+      path: '/faculty/$id/request'
+      fullPath: '/faculty/$id/request'
+      preLoaderRoute: typeof AuthenticatedFacultyIdRequestRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/faculty/$id/timetable': {
+      id: '/_authenticated/faculty/$id/timetable'
+      path: '/faculty/$id/timetable'
+      fullPath: '/faculty/$id/timetable'
+      preLoaderRoute: typeof AuthenticatedFacultyIdTimetableRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedSearchRoute: typeof AuthenticatedSearchRoute
+  AuthenticatedFacultyIdRequestRoute: typeof AuthenticatedFacultyIdRequestRoute
+  AuthenticatedFacultyIdTimetableRoute: typeof AuthenticatedFacultyIdTimetableRoute
+  AuthenticatedFacultyIdIndexRoute: typeof AuthenticatedFacultyIdIndexRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedSearchRoute: AuthenticatedSearchRoute,
+  AuthenticatedFacultyIdRequestRoute: AuthenticatedFacultyIdRequestRoute,
+  AuthenticatedFacultyIdTimetableRoute: AuthenticatedFacultyIdTimetableRoute,
+  AuthenticatedFacultyIdIndexRoute: AuthenticatedFacultyIdIndexRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
