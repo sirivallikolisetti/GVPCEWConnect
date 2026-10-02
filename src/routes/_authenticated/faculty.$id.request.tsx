@@ -73,8 +73,8 @@ function RequestPage() {
   async function submit(e: React.FormEvent) {
     e.preventDefault();
     const parsed = schema.safeParse({ reason: reasonSel === "Other" ? custom : reasonSel, date, time, note });
-    if (!parsed.success) return setErrors(Object.fromEntries(parsed.error.issues.map((i) => [i.path[0], i.message])));
-    if (date < now.dateStr) return setErrors({ date: "Date can't be in the past" });
+    if (!parsed.success) { setErrors(Object.fromEntries(parsed.error.issues.map((i) => [i.path[0], i.message]))); return; }
+    if (date < now.dateStr) { setErrors({ date: "Date can't be in the past" }); return; }
     setErrors({});
     setLoading(true);
     const { error } = await supabase.from("appointments").insert({
@@ -88,7 +88,7 @@ function RequestPage() {
       note: parsed.data.note || null,
     });
     setLoading(false);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("Request sent! You'll be notified when they respond.");
     qc.invalidateQueries({ queryKey: ["appointments"] });
     navigate({ to: "/appointments" });
@@ -110,13 +110,13 @@ function RequestPage() {
               {REASONS.map((r) => <option key={r}>{r}</option>)}
             </select>
             {reasonSel === "Other" && <Input className="mt-2" placeholder="Describe your reason" value={custom} onChange={(e) => setCustom(e.target.value)} />}
-            {errors.reason && <p className="mt-1 text-xs text-destructive">{errors.reason}</p>}
+            {errors["reason"] && <p className="mt-1 text-xs text-destructive">{errors["reason"]}</p>}
           </div>
           <div>
             <Label>Date</Label>
             <Input type="date" className="mt-1" min={now.dateStr} value={date} onChange={(e) => { setDate(e.target.value); setTime(""); }} />
             {isSunday && <p className="mt-1 text-xs text-destructive">College is closed on Sundays.</p>}
-            {errors.date && <p className="mt-1 text-xs text-destructive">{errors.date}</p>}
+            {errors["date"] && <p className="mt-1 text-xs text-destructive">{errors["date"]}</p>}
           </div>
           <div>
             <Label>Time (15 minutes, outside class hours)</Label>
@@ -124,7 +124,7 @@ function RequestPage() {
               <option value="">{!date ? "Pick a date first" : slots.length ? "Select a time" : "No free slots"}</option>
               {slots.map((s) => <option key={s} value={s}>{fmtTime(s)} – {fmtTime(fromMinutes(toMinutes(s) + 15))}</option>)}
             </select>
-            {errors.time && <p className="mt-1 text-xs text-destructive">{errors.time}</p>}
+            {errors["time"] && <p className="mt-1 text-xs text-destructive">{errors["time"]}</p>}
           </div>
           <div>
             <Label>Note (optional)</Label>

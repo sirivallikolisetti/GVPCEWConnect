@@ -56,7 +56,7 @@ function RegisterPage() {
       setErrors(Object.fromEntries(parsed.error.issues.map((i) => [i.path[0], i.message])));
       return;
     }
-    if (role === "student" && !form.roll_no.trim()) return setErrors({ roll_no: "Roll number is required" });
+    if (role === "student" && !form.roll_no.trim()) { setErrors({ roll_no: "Roll number is required" }); return; }
     setErrors({});
     setLoading(true);
     const { data, error } = await supabase.auth.signUp({
@@ -75,7 +75,7 @@ function RegisterPage() {
       },
     });
     setLoading(false);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     if (data.session) navigate({ to: "/dashboard" });
     else setSent(true);
   }
@@ -124,23 +124,23 @@ function RegisterPage() {
             <p className="mt-1 text-xs text-muted-foreground">If your profile and timetable are already listed, pick it.</p>
           </div>
         )}
-        <Field label="Full name" error={errors.full_name}>
+        <Field label="Full name" error={errors["full_name"]}>
           <Input value={form.full_name} onChange={set("full_name")} />
         </Field>
-        <Field label="Email" error={errors.email}>
+        <Field label="Email" error={errors["email"]}>
           <Input type="email" value={form.email} onChange={set("email")} />
         </Field>
-        <Field label="Password" error={errors.password}>
+        <Field label="Password" error={errors["password"]}>
           <Input type="password" value={form.password} onChange={set("password")} />
         </Field>
-        <Field label="Department" error={errors.department_id}>
+        <Field label="Department" error={errors["department_id"]}>
           <select className={selectCls} value={form.department_id} onChange={set("department_id")}>
             <option value="">Select department</option>
             {depts?.map((d) => <option key={d.id} value={d.id}>{d.code} – {d.name}</option>)}
           </select>
         </Field>
         {role === "student" ? (
-          <Field label="Roll number" error={errors.roll_no}>
+          <Field label="Roll number" error={errors["roll_no"]}>
             <Input value={form.roll_no} onChange={set("roll_no")} placeholder="e.g. 22JG1A0501" />
           </Field>
         ) : (
@@ -161,7 +161,7 @@ function RegisterPage() {
   );
 }
 
-function Field({ label, error, children }: { label: string; error?: string; children: React.ReactNode }) {
+function Field({ label, error, children }: { label: string; error?: string | undefined; children: React.ReactNode }) {
   return (
     <div>
       <Label>{label}</Label>
