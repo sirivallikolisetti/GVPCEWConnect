@@ -8,6 +8,7 @@ import { useDepartments, useMe } from "@/lib/data";
 import { Card, Loading, PageHeader } from "@/components/States";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { PasswordInput } from "@/components/PasswordInput";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 
@@ -82,6 +83,16 @@ function SettingsForm() {
     onError: (e: Error) => toast.error(e.message),
   });
 
+  async function forgotCurrent() {
+    const email = me!.user.email;
+    if (!email) { toast.error("No email on your account"); return; }
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/reset-password`,
+    });
+    if (error) toast.error(error.message);
+    else toast.success("Reset link sent — check your email to set a new password.");
+  }
+
   async function signOut() {
     await qc.cancelQueries();
     qc.clear();
@@ -122,10 +133,17 @@ function SettingsForm() {
       <Card>
         <p className="mb-3 font-bold">Change password</p>
         <form onSubmit={(e) => { e.preventDefault(); changePw.mutate(); }} className="grid gap-3 sm:grid-cols-2">
-          <Input type="password" placeholder="Current password" value={pw.current} onChange={(e) => setPw({ ...pw, current: e.target.value })} />
-          <Input type="password" placeholder="New password" value={pw.next} onChange={(e) => setPw({ ...pw, next: e.target.value })} />
+          <PasswordInput placeholder="Current password" value={pw.current} onChange={(e) => setPw({ ...pw, current: e.target.value })} />
+          <PasswordInput placeholder="New password" value={pw.next} onChange={(e) => setPw({ ...pw, next: e.target.value })} />
           <Button variant="soft" className="sm:col-span-2" disabled={changePw.isPending}>Update password</Button>
         </form>
+        <button
+          type="button"
+          onClick={forgotCurrent}
+          className="mt-3 text-xs font-medium text-primary"
+        >
+          Don't remember your current password? Email me a reset link
+        </button>
       </Card>
       <Button variant="danger" className="w-full" onClick={signOut}><LogOut /> Sign out</Button>
     </div>

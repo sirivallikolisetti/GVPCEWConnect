@@ -3,7 +3,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { PasswordInput } from "@/components/PasswordInput";
 import { Label } from "@/components/ui/label";
 import { AuthFrame } from "./login";
 
@@ -38,7 +38,7 @@ function ResetPage() {
       <form onSubmit={submit} className="space-y-4">
         <div>
           <Label htmlFor="pw">New password</Label>
-          <Input id="pw" type="password" className="mt-1" value={pw} onChange={(e) => setPw(e.target.value)} />
+          <PasswordInput id="pw" className="mt-1" value={pw} onChange={(e) => setPw(e.target.value)} />
         </div>
         <Button className="w-full" disabled={loading}>Update password</Button>
       </form>
