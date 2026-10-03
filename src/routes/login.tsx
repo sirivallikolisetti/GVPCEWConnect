@@ -6,6 +6,7 @@ import { Lock, Mail, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { PasswordInput } from "@/components/PasswordInput";
 import { Label } from "@/components/ui/label";
 
 export const Route = createFileRoute("/login")({
@@ -90,8 +91,8 @@ function LoginPage() {
         <div>
           <Label htmlFor="password">Password</Label>
           <div className="relative mt-1">
-            <Lock className="absolute left-3 top-2.5 size-4 text-muted-foreground" />
-            <Input id="password" type="password" className="pl-9" value={password} onChange={(e) => setPassword(e.target.value)} />
+            <Lock className="absolute left-3 top-2.5 z-10 size-4 text-muted-foreground" />
+            <PasswordInput id="password" className="pl-9" value={password} onChange={(e) => setPassword(e.target.value)} />
           </div>
           {errors["password"] && <p className="mt-1 text-xs text-destructive">{errors["password"]}</p>}
           <button type="button" onClick={forgot} className="mt-1 block w-full text-right text-xs font-medium text-primary">Forgot password?</button>
