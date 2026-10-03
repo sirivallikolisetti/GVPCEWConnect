@@ -62,7 +62,7 @@ function StudentDashboard() {
   const followed = dir.data?.faculty.filter((f) => follows.data?.has(f.id)) ?? [];
   const tiles = [
     { to: "/search" as const, icon: Search, label: "Search Faculty" },
-    { to: "/search" as const, icon: Building2, label: "Departments", search: { dept: me?.profile?.departments?.code } },
+    { to: "/search" as const, icon: Building2, label: "Departments", search: { dept: me?.profile?.departments?.code ?? "" } },
     { to: "/notifications" as const, icon: Bell, label: "Notifications", badge: unread },
     { to: "/appointments" as const, icon: CalendarClock, label: "My Appointments" },
   ];
@@ -72,7 +72,7 @@ function StudentDashboard() {
       <h1 className="text-2xl font-bold">Hello, {me?.profile?.full_name?.split(" ")[0]} 👋</h1>
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
         {tiles.map((t) => (
-          <Link key={t.label} to={t.to} search={t.search} className="flex items-center gap-3 rounded-2xl border bg-card p-4 shadow-card hover:border-primary/40">
+          <Link key={t.label} to={t.to} search={t.search ?? {}} className="flex items-center gap-3 rounded-2xl border bg-card p-4 shadow-card hover:border-primary/40">
             <t.icon className="size-5 text-primary" />
             <span className="flex-1 text-sm font-semibold">{t.label}</span>
             {!!t.badge && <span className="rounded-full bg-destructive px-2 text-xs font-bold text-destructive-foreground">{t.badge}</span>}

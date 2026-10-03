@@ -139,9 +139,9 @@ function CompleteRegistration() {
       p_role: role,
       p_full_name: meta["full_name"] || me?.user.email?.split("@")[0] || "User",
       p_department_id: (meta["department_id"] || null) as unknown as string,
-      p_roll_no: meta["roll_no"] || undefined,
-      p_claim_faculty_id: meta["claim_faculty_id"] || undefined,
-      p_designation: meta["designation"] || undefined,
+      ...(meta["roll_no"] ? { p_roll_no: meta["roll_no"] } : {}),
+      ...(meta["claim_faculty_id"] ? { p_claim_faculty_id: meta["claim_faculty_id"] } : {}),
+      ...(meta["designation"] ? { p_designation: meta["designation"] } : {}),
     });
     if (error) return setErr(error.message);
     qc.invalidateQueries();
