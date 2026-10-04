@@ -55,6 +55,7 @@ export type Database = {
           reason: string
           start_time: string
           status: Database["public"]["Enums"]["appt_status"]
+          student_class: string | null
           student_id: string | null
           student_name: string
           updated_at: string
@@ -70,6 +71,7 @@ export type Database = {
           reason: string
           start_time: string
           status?: Database["public"]["Enums"]["appt_status"]
+          student_class?: string | null
           student_id?: string | null
           student_name: string
           updated_at?: string
@@ -85,6 +87,7 @@ export type Database = {
           reason?: string
           start_time?: string
           status?: Database["public"]["Enums"]["appt_status"]
+          student_class?: string | null
           student_id?: string | null
           student_name?: string
           updated_at?: string
@@ -275,6 +278,8 @@ export type Database = {
           full_name: string
           id: string
           roll_no: string | null
+          section: string | null
+          year: number | null
         }
         Insert: {
           created_at?: string
@@ -283,6 +288,8 @@ export type Database = {
           full_name: string
           id: string
           roll_no?: string | null
+          section?: string | null
+          year?: number | null
         }
         Update: {
           created_at?: string
@@ -291,6 +298,8 @@ export type Database = {
           full_name?: string
           id?: string
           roll_no?: string | null
+          section?: string | null
+          year?: number | null
         }
         Relationships: [
           {
@@ -374,6 +383,8 @@ export type Database = {
           p_full_name: string
           p_role: Database["public"]["Enums"]["app_role"]
           p_roll_no?: string
+          p_section?: string
+          p_year?: number
         }
         Returns: undefined
       }

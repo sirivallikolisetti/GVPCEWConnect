@@ -191,7 +191,7 @@ function FacultyDashboard() {
             <div className="mt-3 space-y-2">
               {pending.slice(0, 3).map((a) => (
                 <div key={a.id} className="text-sm">
-                  <p className="font-semibold">{a.student_name}</p>
+                  <p className="font-semibold">{a.student_name}{a.student_class && <span className="ml-2 text-xs font-bold text-primary">{a.student_class}</span>}</p>
                   <p className="text-xs text-muted-foreground">{a.reason} · {fmtDate(a.appt_date)} {fmtTime(a.start_time)}</p>
                 </div>
               ))}

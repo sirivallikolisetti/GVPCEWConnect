@@ -77,7 +77,7 @@ function RequestsPage() {
                 <Avatar name={a.student_name} className="size-10" />
                 <div className="flex-1">
                   <div className="flex flex-wrap items-center justify-between gap-2">
-                    <p className="font-semibold">{a.student_name}</p>
+                    <p className="font-semibold">{a.student_name}{a.student_class && <span className="ml-2 rounded bg-primary-soft px-1.5 py-0.5 text-xs font-bold text-primary">{a.student_class}</span>}</p>
                     <span className={`rounded-full px-2.5 py-0.5 text-xs font-semibold capitalize ${statusCls[a.status]}`}>{a.status}</span>
                   </div>
                   <p className="text-sm text-muted-foreground">{a.reason}</p>

@@ -42,6 +42,8 @@ function SettingsForm() {
     full_name: me!.profile?.full_name ?? "",
     roll_no: me!.profile?.roll_no ?? "",
     department_id: me!.profile?.department_id ?? "",
+    year: me!.profile?.year ? String(me!.profile.year) : "",
+    section: me!.profile?.section ?? "",
   });
   const [f, setF] = useState({
     designation: fac?.designation ?? "",
@@ -57,6 +59,7 @@ function SettingsForm() {
       if (p.full_name.trim().length < 2) throw new Error("Enter your full name");
       const { error } = await supabase.from("profiles").update({
         full_name: p.full_name.trim().slice(0, 100), roll_no: p.roll_no.trim() || null, department_id: p.department_id || null,
+        year: p.year ? Number(p.year) : null, section: p.section.trim().toUpperCase().slice(0, 3) || null,
       }).eq("id", me!.user.id);
       if (error) throw error;
       if (fac) {
@@ -114,7 +117,19 @@ function SettingsForm() {
             </select>
           </div>
           {me!.role === "student" && (
-            <div><Label>Roll number</Label><Input className="mt-1" value={p.roll_no} onChange={(e) => setP({ ...p, roll_no: e.target.value })} /></div>
+            <>
+              <div><Label>Roll number</Label><Input className="mt-1" value={p.roll_no} onChange={(e) => setP({ ...p, roll_no: e.target.value })} /></div>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div>
+                  <Label>Year</Label>
+                  <select className={selectCls} value={p.year} onChange={(e) => setP({ ...p, year: e.target.value })}>
+                    <option value="">—</option>
+                    {[1, 2, 3, 4].map((y) => <option key={y} value={y}>{y} year</option>)}
+                  </select>
+                </div>
+                <div><Label>Section</Label><Input className="mt-1" maxLength={3} value={p.section} onChange={(e) => setP({ ...p, section: e.target.value })} /></div>
+              </div>
+            </>
           )}
           {fac && (
             <>

@@ -142,6 +142,8 @@ function CompleteRegistration() {
       ...(meta["roll_no"] ? { p_roll_no: meta["roll_no"] } : {}),
       ...(meta["claim_faculty_id"] ? { p_claim_faculty_id: meta["claim_faculty_id"] } : {}),
       ...(meta["designation"] ? { p_designation: meta["designation"] } : {}),
+      ...(meta["year"] ? { p_year: Number(meta["year"]) } : {}),
+      ...(meta["section"] ? { p_section: meta["section"] } : {}),
     });
     if (error) return setErr(error.message);
     qc.invalidateQueries();
