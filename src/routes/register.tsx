@@ -36,7 +36,7 @@ function RegisterPage() {
   const navigate = useNavigate();
   const { data: depts } = useDepartments();
   const [role, setRole] = useState<"student" | "faculty">("student");
-  const [form, setForm] = useState({ full_name: "", email: "", password: "", department_id: "", roll_no: "", designation: "", claim: "" });
+  const [form, setForm] = useState({ full_name: "", email: "", password: "", department_id: "", roll_no: "", year: "", section: "", designation: "", claim: "" });
   const [unclaimed, setUnclaimed] = useState<{ id: string; full_name: string; department_code: string | null }[]>([]);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(false);
@@ -57,6 +57,8 @@ function RegisterPage() {
       return;
     }
     if (role === "student" && !form.roll_no.trim()) { setErrors({ roll_no: "Roll number is required" }); return; }
+    if (role === "student" && !form.year) { setErrors({ year: "Choose your year" }); return; }
+    if (role === "student" && !form.section.trim()) { setErrors({ section: "Enter your section" }); return; }
     setErrors({});
     setLoading(true);
     const { data, error } = await supabase.auth.signUp({
@@ -69,6 +71,8 @@ function RegisterPage() {
           full_name: parsed.data.full_name,
           department_id: parsed.data.department_id,
           roll_no: role === "student" ? form.roll_no.trim() : null,
+          year: role === "student" ? form.year : null,
+          section: role === "student" ? form.section.trim().toUpperCase() : null,
           claim_faculty_id: role === "faculty" && form.claim ? form.claim : null,
           designation: role === "faculty" ? form.designation.trim() : null,
         },
@@ -140,9 +144,22 @@ function RegisterPage() {
           </select>
         </Field>
         {role === "student" ? (
-          <Field label="Roll number" error={errors["roll_no"]}>
-            <Input value={form.roll_no} onChange={set("roll_no")} placeholder="e.g. 22JG1A0501" />
-          </Field>
+          <>
+            <Field label="Roll number" error={errors["roll_no"]}>
+              <Input value={form.roll_no} onChange={set("roll_no")} placeholder="e.g. 22JG1A0501" />
+            </Field>
+            <div className="grid grid-cols-2 gap-3">
+              <Field label="Year" error={errors["year"]}>
+                <select className={selectCls} value={form.year} onChange={set("year")}>
+                  <option value="">Select</option>
+                  {[1, 2, 3, 4].map((y) => <option key={y} value={y}>{y} year</option>)}
+                </select>
+              </Field>
+              <Field label="Section" error={errors["section"]}>
+                <Input value={form.section} onChange={set("section")} placeholder="e.g. 2" maxLength={3} />
+              </Field>
+            </div>
+          </>
         ) : (
           !form.claim && (
             <Field label="Designation">
