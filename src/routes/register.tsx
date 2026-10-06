@@ -6,6 +6,7 @@ import { Loader2, MailCheck } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { PasswordInput } from "@/components/PasswordInput";
 import { Label } from "@/components/ui/label";
 import { useDepartments } from "@/lib/data";
 import { AuthFrame } from "./login";
@@ -17,6 +18,8 @@ export const Route = createFileRoute("/register")({
       { name: "description", content: "Create a student or faculty account on GVPCEW Connect." },
       { property: "og:title", content: "Register – GVPCEW Connect" },
       { property: "og:description", content: "Join GVPCEW Connect as a student or faculty member." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: RegisterPage,
@@ -135,7 +138,7 @@ function RegisterPage() {
           <Input type="email" value={form.email} onChange={set("email")} />
         </Field>
         <Field label="Password" error={errors["password"]}>
-          <Input type="password" value={form.password} onChange={set("password")} />
+          <PasswordInput value={form.password} onChange={set("password")} autoComplete="new-password" />
         </Field>
         <Field label="Department" error={errors["department_id"]}>
           <select className={selectCls} value={form.department_id} onChange={set("department_id")}>
